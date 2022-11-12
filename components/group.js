@@ -315,3 +315,27 @@ exports.clearSplit = async (
         group
     );
 };
+
+exports.groupBalanceSheet = async (req, res) => {
+    try {
+        const group = await model.Group.findOne({
+            _id: req.body.id,
+        });
+        if (!group) {
+            var err = new Error('Invalid Group Id');
+            err.status = 400;
+            throw err;
+        }
+        res.status(200).json({
+            status: 'Success',
+            data: splitCalculator(group.split[0]),
+        });
+    } catch (err) {
+        logger.error(
+            `URL : ${req.originalUrl} | staus : ${err.status} | message: ${err.message}`
+        );
+        res.status(err.status || 500).json({
+            message: err.message,
+        });
+    }
+};

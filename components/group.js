@@ -7,10 +7,7 @@ exports.createGroup = async (req, res) => {
     try {
         var newGroup = new model.Group(req.body);
 
-        if (
-            validator.notNull(newGroup.groupName) &&
-            validator.currencyValidation(newGroup.groupCurrency)
-        ) {
+        if (validator.notNull(newGroup.groupName) && validator.currencyValidation(newGroup.groupCurrency)) {
             var splitJson = {};
 
             for (var user of newGroup.groupMembers) {
@@ -26,9 +23,7 @@ exports.createGroup = async (req, res) => {
 
             newGroup.split = splitJson;
 
-            var ownerCheck = await validator.userValidation(
-                newGroup.groupOwner
-            );
+            var ownerCheck = await validator.userValidation(newGroup.groupOwner);
             if (!ownerCheck) {
                 var err = new Error('Invalid owner id');
                 err.status = 400;
@@ -43,9 +38,7 @@ exports.createGroup = async (req, res) => {
             });
         }
     } catch (err) {
-        logger.error(
-            `URL : ${req.originalUrl} | staus : ${err.status} | message: ${err.message} ${err.stack}`
-        );
+        logger.error(`URL : ${req.originalUrl} | staus : ${err.status} | message: ${err.message} ${err.stack}`);
         res.status(err.status || 500).json({
             message: err.message,
         });
@@ -67,9 +60,7 @@ exports.viewGroup = async (req, res) => {
             group: group,
         });
     } catch (err) {
-        logger.error(
-            `URL : ${req.originalUrl} | staus : ${err.status} | message: ${err.message}`
-        );
+        logger.error(`URL : ${req.originalUrl} | staus : ${err.status} | message: ${err.message}`);
         res.status(err.status || 500).json({
             message: err.message,
         });
@@ -96,9 +87,7 @@ exports.findUserGroup = async (req, res) => {
             groups: groups,
         });
     } catch (err) {
-        logger.error(
-            `URL : ${req.originalUrl} | staus : ${err.status} | message: ${err.message}`
-        );
+        logger.error(`URL : ${req.originalUrl} | staus : ${err.status} | message: ${err.message}`);
         res.status(err.status || 500).json({
             message: err.message,
         });
@@ -119,10 +108,7 @@ exports.editGroup = async (req, res) => {
 
         editGroup.split = group.split;
 
-        if (
-            validator.notNull(editGroup.groupName) &&
-            validator.currencyValidation(editGroup.groupCurrency)
-        ) {
+        if (validator.notNull(editGroup.groupName) && validator.currencyValidation(editGroup.groupCurrency)) {
             for (var user of editGroup.groupMembers) {
                 var memberCheck = await validator.userValidation(user);
                 if (!memberCheck) {
@@ -136,9 +122,7 @@ exports.editGroup = async (req, res) => {
                 }
             }
 
-            var ownerCheck = await validator.userValidation(
-                editGroup.groupOwner
-            );
+            var ownerCheck = await validator.userValidation(editGroup.groupOwner);
             if (!ownerCheck) {
                 var err = new Error('Invalid owner id');
                 err.status = 400;
@@ -158,7 +142,7 @@ exports.editGroup = async (req, res) => {
                         groupCategory: editGroup.groupCategory,
                         split: editGroup.split,
                     },
-                }
+                },
             );
             res.status(200).json({
                 status: 'Success',
@@ -167,9 +151,7 @@ exports.editGroup = async (req, res) => {
             });
         }
     } catch (err) {
-        logger.error(
-            `URL : ${req.originalUrl} | staus : ${err.status} | message: ${err.message}`
-        );
+        logger.error(`URL : ${req.originalUrl} | staus : ${err.status} | message: ${err.message}`);
         res.status(err.status || 500).json({
             message: err.message,
         });
@@ -195,15 +177,13 @@ exports.deleteGroup = async (req, res) => {
             response: delete_group,
         });
     } catch (err) {
-        logger.error(
-            `URL : ${req.originalUrl} | staus : ${err.status} | message: ${err.message}`
-        );
+        logger.error(`URL : ${req.originalUrl} | staus : ${err.status} | message: ${err.message}`);
         res.status(err.status || 500).json({
             message: err.message,
         });
     }
 };
-// 
+//
 exports.makeSettlement = async (req, res) => {
     try {
         var reqBody = new model.Settlement(req.body);
@@ -225,10 +205,7 @@ exports.makeSettlement = async (req, res) => {
         group.split[0][req.body.settleTo] -= req.body.settleAmount;
 
         var id = await model.Settlement.create(reqBody);
-        var update_response = await model.Group.updateOne(
-            { _id: group._id },
-            { $set: { split: group.split } }
-        );
+        var update_response = await model.Group.updateOne({ _id: group._id }, { $set: { split: group.split } });
 
         res.status(200).json({
             message: 'Settlement successfully!',
@@ -237,29 +214,21 @@ exports.makeSettlement = async (req, res) => {
             response: id,
         });
     } catch (err) {
-        logger.error(
-            `URL : ${req.originalUrl} | staus : ${err.status} | message: ${err.message}`
-        );
+        logger.error(`URL : ${req.originalUrl} | staus : ${err.status} | message: ${err.message}`);
         res.status(err.status || 500).json({
             message: err.message,
         });
     }
 };
 
-exports.addSplit = async (
-    groupId,
-    expenseAmount,
-    expenseOwner,
-    expenseMembers
-) => {
+exports.addSplit = async (groupId, expenseAmount, expenseOwner, expenseMembers) => {
     var group = await model.Group.findOne({
         _id: groupId,
     });
     group.groupTotal += expenseAmount;
     group.split[0][expenseOwner] += expenseAmount;
     expensePerPerson = expenseAmount / expenseMembers.length;
-    expensePerPerson =
-        Math.round((expensePerPerson + Number.EPSILON) * 100) / 100;
+    expensePerPerson = Math.round((expensePerPerson + Number.EPSILON) * 100) / 100;
 
     for (var user of expenseMembers) {
         group.split[0][user] -= expensePerPerson;
@@ -270,31 +239,24 @@ exports.addSplit = async (
         bal += val[1];
     }
     group.split[0][expenseOwner] -= bal;
-    group.split[0][expenseOwner] =
-        Math.round((group.split[0][expenseOwner] + Number.EPSILON) * 100) / 100;
+    group.split[0][expenseOwner] = Math.round((group.split[0][expenseOwner] + Number.EPSILON) * 100) / 100;
 
     return await model.Group.updateOne(
         {
             _id: groupId,
         },
-        group
+        group,
     );
 };
 
-exports.clearSplit = async (
-    groupId,
-    expenseAmount,
-    expenseOwner,
-    expenseMembers
-) => {
+exports.clearSplit = async (groupId, expenseAmount, expenseOwner, expenseMembers) => {
     var group = await model.Group.findOne({
         _id: groupId,
     });
     group.groupTotal -= expenseAmount;
     group.split[0][expenseOwner] -= expenseAmount;
     expensePerPerson = expenseAmount / expenseMembers.length;
-    expensePerPerson =
-        Math.round((expensePerPerson + Number.EPSILON) * 100) / 100;
+    expensePerPerson = Math.round((expensePerPerson + Number.EPSILON) * 100) / 100;
 
     for (var user of expenseMembers) {
         group.split[0][user] += expensePerPerson;
@@ -305,14 +267,13 @@ exports.clearSplit = async (
         bal += val[1];
     }
     group.split[0][expenseOwner] -= bal;
-    group.split[0][expenseOwner] =
-        Math.round((group.split[0][expenseOwner] + Number.EPSILON) * 100) / 100;
+    group.split[0][expenseOwner] = Math.round((group.split[0][expenseOwner] + Number.EPSILON) * 100) / 100;
 
     return await model.Group.updateOne(
         {
             _id: groupId,
         },
-        group
+        group,
     );
 };
 
@@ -331,9 +292,7 @@ exports.groupBalanceSheet = async (req, res) => {
             data: splitCalculator(group.split[0]),
         });
     } catch (err) {
-        logger.error(
-            `URL : ${req.originalUrl} | staus : ${err.status} | message: ${err.message}`
-        );
+        logger.error(`URL : ${req.originalUrl} | staus : ${err.status} | message: ${err.message}`);
         res.status(err.status || 500).json({
             message: err.message,
         });

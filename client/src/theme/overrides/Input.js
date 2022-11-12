@@ -37,8 +37,7 @@ export default function Input(theme) {
                         backgroundColor: theme.palette.action.focus,
                     },
                     '&.Mui-disabled': {
-                        backgroundColor:
-                            theme.palette.action.disabledBackground,
+                        backgroundColor: theme.palette.action.disabledBackground,
                     },
                 },
                 underline: {
@@ -56,8 +55,7 @@ export default function Input(theme) {
                     },
                     '&.Mui-disabled': {
                         '& .MuiOutlinedInput-notchedOutline': {
-                            borderColor:
-                                theme.palette.action.disabledBackground,
+                            borderColor: theme.palette.action.disabledBackground,
                         },
                     },
                 },

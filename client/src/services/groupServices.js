@@ -38,12 +38,8 @@ export const editGroupService = async (data, setAlert, setAlertMessage) => {
     }
 };
 
-export const getGroupDetailsService = async (
-    data,
-    setAlert,
-    setAlertMessage
-    ) => {
-        try {
+export const getGroupDetailsService = async (data, setAlert, setAlertMessage) => {
+    try {
         const group_details = await api.getGroupDetails(data);
         console.log(group_details.data)
         return group_details;
@@ -56,11 +52,7 @@ export const getGroupDetailsService = async (
     }
 };
 
-export const getGroupExpenseService = async (
-    data,
-    setAlert,
-    setAlertMessage
-) => {
+export const getGroupExpenseService = async (data, setAlert, setAlertMessage) => {
     try {
         const expense_details = await api.getGroupExpense(data);
         return expense_details;
@@ -73,11 +65,7 @@ export const getGroupExpenseService = async (
     }
 };
 
-export const getGroupSettleService = async (
-    data,
-    setAlert,
-    setAlertMessage
-) => {
+export const getGroupSettleService = async (data, setAlert, setAlertMessage) => {
     try {
         const settle_details = await api.getSettle(data);
         return settle_details;

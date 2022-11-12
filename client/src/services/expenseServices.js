@@ -13,11 +13,7 @@ export const addExpenseService = async (data, setAlert, setAlertMessage) => {
     }
 };
 
-export const getGroupCategoryExpService = async (
-    data,
-    setAlert,
-    setAlertMessage
-) => {
+export const getGroupCategoryExpService = async (data, setAlert, setAlertMessage) => {
     try {
         return await api.getGroupCategoryExp(data);
     } catch (err) {
@@ -28,11 +24,7 @@ export const getGroupCategoryExpService = async (
         return false;
     }
 };
-export const getGroupMonthlyExpService = async (
-    data,
-    setAlert,
-    setAlertMessage
-) => {
+export const getGroupMonthlyExpService = async (data, setAlert, setAlertMessage) => {
     try {
         return await api.getGroupMonthlyExp(data);
     } catch (err) {
@@ -44,11 +36,7 @@ export const getGroupMonthlyExpService = async (
     }
 };
 
-export const getGroupDailyExpService = async (
-    data,
-    setAlert,
-    setAlertMessage
-) => {
+export const getGroupDailyExpService = async (data, setAlert, setAlertMessage) => {
     try {
         return await api.getGroupDailyExp(data);
     } catch (err) {
@@ -60,11 +48,7 @@ export const getGroupDailyExpService = async (
     }
 };
 
-export const getUserExpenseService = async (
-    data,
-    setAlert,
-    setAlertMessage
-) => {
+export const getUserExpenseService = async (data, setAlert, setAlertMessage) => {
     try {
         const expense_details = await api.getUserExpense(data);
         return expense_details;
@@ -77,11 +61,7 @@ export const getUserExpenseService = async (
     }
 };
 
-export const getUserMonthlyExpService = async (
-    data,
-    setAlert,
-    setAlertMessage
-) => {
+export const getUserMonthlyExpService = async (data, setAlert, setAlertMessage) => {
     try {
         return await api.getUserMonthlyExp(data);
     } catch (err) {
@@ -93,11 +73,7 @@ export const getUserMonthlyExpService = async (
     }
 };
 
-export const getUserDailyExpService = async (
-    data,
-    setAlert,
-    setAlertMessage
-) => {
+export const getUserDailyExpService = async (data, setAlert, setAlertMessage) => {
     try {
         return await api.getUserDailyExp(data);
     } catch (err) {
@@ -109,11 +85,7 @@ export const getUserDailyExpService = async (
     }
 };
 
-export const getUserCategoryExpService = async (
-    data,
-    setAlert,
-    setAlertMessage
-) => {
+export const getUserCategoryExpService = async (data, setAlert, setAlertMessage) => {
     try {
         return await api.getUserCategoryExp(data);
     } catch (err) {
@@ -125,11 +97,7 @@ export const getUserCategoryExpService = async (
     }
 };
 
-export const getRecentUserExpService = async (
-    data,
-    setAlert,
-    setAlertMessage
-) => {
+export const getRecentUserExpService = async (data, setAlert, setAlertMessage) => {
     try {
         return await api.getRecentUserExp(data);
     } catch (err) {

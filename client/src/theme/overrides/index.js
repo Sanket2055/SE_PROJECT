@@ -22,6 +22,6 @@ export default function ComponentsOverrides(theme) {
         Backdrop(theme),
         Typography(theme),
         CssBaseline(theme),
-        Autocomplete(theme)
+        Autocomplete(theme),
     );
 }

@@ -23,7 +23,7 @@ export default function useResponsive(query, key, start, end) {
         return mediaDown;
     }
 
-    if (query === 'left') {
+    if (query === 'between') {
         return mediaBetween;
     }
 

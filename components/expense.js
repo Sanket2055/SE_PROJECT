@@ -199,3 +199,356 @@ exports.deleteExpense = async (req, res) => {
     });
   }
 };
+
+exports.viewExpense = async (req, res) => {
+  try {
+    var expense = await model.Expense.findOne({
+      _id: req.body.id,
+    });
+    if (expense.length == 0) {
+      var err = new Error("No expense present for the Id");
+      err.status = 400;
+      throw err;
+    }
+    res.status(200).json({
+      status: "Success",
+      expense: expense,
+    });
+  } catch (err) {
+    logger.error(
+      `URL : ${req.originalUrl} | staus : ${err.status} | message: ${err.message}`
+    );
+    res.status(err.status || 500).json({
+      message: err.message,
+    });
+  }
+};
+
+exports.viewGroupExpense = async (req, res) => {
+  try {
+    var groupExpense = await model.Expense.find({
+      groupId: req.body.id,
+    }).sort({
+      expenseDate: -1,
+    });
+    if (groupExpense.length == 0) {
+      var err = new Error("No expense present for the group");
+      err.status = 400;
+      throw err;
+    }
+    var totalAmount = 0;
+    for (var expense of groupExpense) {
+      totalAmount += expense["expenseAmount"];
+    }
+    res.status(200).json({
+      status: "Success",
+      expense: groupExpense,
+      total: totalAmount,
+    });
+  } catch (err) {
+    logger.error(
+      `URL : ${req.originalUrl} | staus : ${err.status} | message: ${err.message}`
+    );
+    res.status(err.status || 500).json({
+      message: err.message,
+    });
+  }
+};
+
+exports.viewUserExpense = async (req, res) => {
+  try {
+    validator.notNull(req.body.user);
+    var userExpense = await model.Expense.find({
+      expenseMembers: req.body.user,
+    }).sort({
+      expenseDate: -1,
+    });
+    if (userExpense.length == 0) {
+      var err = new Error("No expense present for the user");
+      err.status = 400;
+      throw err;
+    }
+    var totalAmount = 0;
+    for (var expense of userExpense) {
+      totalAmount += expense["expensePerMember"];
+    }
+    res.status(200).json({
+      status: "Success",
+      expense: userExpense,
+      total: totalAmount,
+    });
+  } catch (err) {
+    logger.error(
+      `URL : ${req.originalUrl} | staus : ${err.status} | message: ${err.message}`
+    );
+    res.status(err.status || 500).json({
+      message: err.message,
+    });
+  }
+};
+
+exports.recentUserExpenses = async (req, res) => {
+  try {
+    var recentExpense = await model.Expense.find({
+      expenseMembers: req.body.user,
+    })
+      .sort({
+        $natural: -1,
+      })
+      .limit(5);
+    if (recentExpense.length == 0) {
+      var err = new Error("No expense present for the user");
+      err.status = 400;
+      throw err;
+    }
+    res.status(200).json({
+      status: "Success",
+      expense: recentExpense,
+    });
+  } catch (err) {
+    logger.error(
+      `URL : ${req.originalUrl} | staus : ${err.status} | message: ${err.message}`
+    );
+    res.status(err.status || 500).json({
+      message: err.message,
+    });
+  }
+};
+
+exports.groupCategoryExpense = async (req, res) => {
+  try {
+    var categoryExpense = await model.Expense.aggregate([
+      {
+        $match: {
+          groupId: req.body.id,
+        },
+      },
+      {
+        $group: {
+          _id: "$expenseCategory",
+          amount: {
+            $sum: "$expenseAmount",
+          },
+        },
+      },
+      { $sort: { _id: 1 } },
+    ]);
+
+    res.status(200).json({
+      status: "success",
+      data: categoryExpense,
+    });
+  } catch (err) {
+    logger.error(
+      `URL : ${req.originalUrl} | staus : ${err.status} | message: ${err.message}`
+    );
+    res.status(err.status || 500).json({
+      message: err.message,
+    });
+  }
+};
+
+exports.groupMonthlyExpense = async (req, res) => {
+  try {
+    var monthlyExpense = await model.Expense.aggregate([
+      {
+        $match: {
+          groupId: req.body.id,
+        },
+      },
+      {
+        $group: {
+          _id: {
+            month: {
+              $month: "$expenseDate",
+            },
+            year: {
+              $year: "$expenseDate",
+            },
+          },
+          amount: {
+            $sum: "$expenseAmount",
+          },
+        },
+      },
+      { $sort: { "_id.month": 1 } },
+    ]);
+    res.status(200).json({
+      status: "success",
+      data: monthlyExpense,
+    });
+  } catch (err) {
+    logger.error(
+      `URL : ${req.originalUrl} | staus : ${err.status} | message: ${err.message}`
+    );
+    res.status(err.status || 500).json({
+      message: err.message,
+    });
+  }
+};
+
+new Date(new Date().setMonth(new Date().getMonth() - 5));
+
+exports.groupDailyExpense = async (req, res) => {
+  try {
+    var dailyExpense = await model.Expense.aggregate([
+      {
+        $match: {
+          groupId: req.body.id,
+          expenseDate: {
+            $gte: new Date(new Date().setMonth(new Date().getMonth() - 1)),
+            $lte: new Date(),
+          },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            date: {
+              $dayOfMonth: "$expenseDate",
+            },
+            month: {
+              $month: "$expenseDate",
+            },
+            year: {
+              $year: "$expenseDate",
+            },
+          },
+          amount: {
+            $sum: "$expenseAmount",
+          },
+        },
+      },
+      { $sort: { "_id.month": 1, "_id.date": 1 } },
+    ]);
+    res.status(200).json({
+      status: "success",
+      data: dailyExpense,
+    });
+  } catch (err) {
+    logger.error(
+      `URL : ${req.originalUrl} | staus : ${err.status} | message: ${err.message}`
+    );
+    res.status(err.status || 500).json({
+      message: err.message,
+    });
+  }
+};
+
+exports.userCategoryExpense = async (req, res) => {
+  try {
+    var categoryExpense = await model.Expense.aggregate([
+      {
+        $match: {
+          expenseMembers: req.body.user,
+        },
+      },
+      {
+        $group: {
+          _id: "$expenseCategory",
+          amount: {
+            $sum: "$expensePerMember",
+          },
+        },
+      },
+      { $sort: { _id: 1 } },
+    ]);
+
+    res.status(200).json({
+      status: "success",
+      data: categoryExpense,
+    });
+  } catch (err) {
+    logger.error(
+      `URL : ${req.originalUrl} | staus : ${err.status} | message: ${err.message}`
+    );
+    res.status(err.status || 500).json({
+      message: err.message,
+    });
+  }
+};
+
+exports.userMonthlyExpense = async (req, res) => {
+  try {
+    var monthlyExpense = await model.Expense.aggregate([
+      {
+        $match: {
+          expenseMembers: req.body.user,
+        },
+      },
+      {
+        $group: {
+          _id: {
+            month: {
+              $month: "$expenseDate",
+            },
+            year: {
+              $year: "$expenseDate",
+            },
+          },
+          amount: {
+            $sum: "$expensePerMember",
+          },
+        },
+      },
+      { $sort: { "_id.month": 1 } },
+    ]);
+    res.status(200).json({
+      status: "success",
+      data: monthlyExpense,
+    });
+  } catch (err) {
+    logger.error(
+      `URL : ${req.originalUrl} | staus : ${err.status} | message: ${err.message}`
+    );
+    res.status(err.status || 500).json({
+      message: err.message,
+    });
+  }
+};
+
+exports.userDailyExpense = async (req, res) => {
+  try {
+    var dailyExpense = await model.Expense.aggregate([
+      {
+        $match: {
+          expenseMembers: req.body.user,
+          expenseDate: {
+            $gte: new Date(new Date().setMonth(new Date().getMonth() - 1)),
+            $lte: new Date(),
+          },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            date: {
+              $dayOfMonth: "$expenseDate",
+            },
+            month: {
+              $month: "$expenseDate",
+            },
+            year: {
+              $year: "$expenseDate",
+            },
+          },
+          amount: {
+            $sum: "$expenseAmount",
+          },
+        },
+      },
+      { $sort: { "_id.month": 1, "_id.date": 1 } },
+    ]);
+    res.status(200).json({
+      status: "success",
+      data: dailyExpense,
+    });
+  } catch (err) {
+    logger.error(
+      `URL : ${req.originalUrl} | staus : ${err.status} | message: ${err.message}`
+    );
+    res.status(err.status || 500).json({
+      message: err.message,
+    });
+  }
+};

@@ -82,9 +82,7 @@ export default function NotificationsPopover() {
 
     const [notifications, setNotifications] = useState(NOTIFICATIONS);
 
-    const totalUnRead = notifications.filter(
-        (item) => item.isUnRead === true
-    ).length;
+    const totalUnRead = notifications.filter((item) => item.isUnRead === true).length;
 
     const [open, setOpen] = useState(null);
 
@@ -101,7 +99,7 @@ export default function NotificationsPopover() {
             notifications.map((notification) => ({
                 ...notification,
                 isUnRead: false,
-            }))
+            })),
         );
     };
 
@@ -133,38 +131,23 @@ export default function NotificationsPopover() {
                     }}
                 >
                     <Box sx={{ flexGrow: 1 }}>
-                        <Typography variant="subtitle1">
-                            Notifications
-                        </Typography>
-                        <Typography
-                            variant="body2"
-                            sx={{ color: 'text.secondary' }}
-                        >
+                        <Typography variant="subtitle1">Notifications</Typography>
+                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                             You have {totalUnRead} unread messages
                         </Typography>
                     </Box>
 
                     {totalUnRead > 0 && (
                         <Tooltip title=" Mark all as read">
-                            <IconButton
-                                color="primary"
-                                onClick={handleMarkAllAsRead}
-                            >
-                                <Iconify
-                                    icon="eva:done-all-fill"
-                                    width={20}
-                                    height={20}
-                                />
+                            <IconButton color="primary" onClick={handleMarkAllAsRead}>
+                                <Iconify icon="eva:done-all-fill" width={20} height={20} />
                             </IconButton>
                         </Tooltip>
                     )}
                 </Box>
                 <List>
                     {notifications.slice(0, 3).map((notification) => (
-                        <NotificationItem
-                            key={notification.id}
-                            notification={notification}
-                        />
+                        <NotificationItem key={notification.id} notification={notification} />
                     ))}
                 </List>
             </MenuPopover>
@@ -215,10 +198,7 @@ function NotificationItem({ notification }) {
                             color: 'text.disabled',
                         }}
                     >
-                        <Iconify
-                            icon="eva:clock-outline"
-                            sx={{ mr: 0.5, width: 16, height: 16 }}
-                        />
+                        <Iconify icon="eva:clock-outline" sx={{ mr: 0.5, width: 16, height: 16 }} />
                         {fToNow(notification.createdAt)}
                     </Typography>
                 }
@@ -233,11 +213,7 @@ function renderContent(notification) {
     const title = (
         <Typography variant="subtitle2">
             {notification.title}
-            <Typography
-                component="span"
-                variant="body2"
-                sx={{ color: 'text.secondary' }}
-            >
+            <Typography component="span" variant="body2" sx={{ color: 'text.secondary' }}>
                 &nbsp; {noCase(notification.description)}
             </Typography>
         </Typography>
@@ -245,52 +221,30 @@ function renderContent(notification) {
 
     if (notification.type === 'order_placed') {
         return {
-            avatar: (
-                <img
-                    alt={notification.title}
-                    src="/static/icons/ic_notification_package.svg"
-                />
-            ),
+            avatar: <img alt={notification.title} src="/static/icons/ic_notification_package.svg" />,
             title,
         };
     }
     if (notification.type === 'order_shipped') {
         return {
-            avatar: (
-                <img
-                    alt={notification.title}
-                    src="/static/icons/ic_notification_shipping.svg"
-                />
-            ),
+            avatar: <img alt={notification.title} src="/static/icons/ic_notification_shipping.svg" />,
             title,
         };
     }
     if (notification.type === 'mail') {
         return {
-            avatar: (
-                <img
-                    alt={notification.title}
-                    src="/static/icons/ic_notification_mail.svg"
-                />
-            ),
+            avatar: <img alt={notification.title} src="/static/icons/ic_notification_mail.svg" />,
             title,
         };
     }
     if (notification.type === 'chat_message') {
         return {
-            avatar: (
-                <img
-                    alt={notification.title}
-                    src="/static/icons/ic_notification_chat.svg"
-                />
-            ),
+            avatar: <img alt={notification.title} src="/static/icons/ic_notification_chat.svg" />,
             title,
         };
     }
     return {
-        avatar: notification.avatar ? (
-            <img alt={notification.title} src={notification.avatar} />
-        ) : null,
+        avatar: notification.avatar ? <img alt={notification.title} src={notification.avatar} /> : null,
         title,
     };
 }

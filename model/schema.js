@@ -3,7 +3,7 @@ var logger = require('../helper/logger');
 
 mongoose
     .connect(
-        process.env.MONGODB_URI
+        process.env.MONGODB_URI,
         //     {
         //     maxPoolSize: 50,
         //     wtimeoutMS: 2500,

@@ -3,15 +3,7 @@ import { useEffect } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
-import {
-    Box,
-    Link,
-    Button,
-    Drawer,
-    Typography,
-    Avatar,
-    Stack,
-} from '@mui/material';
+import { Box, Link, Button, Drawer, Typography, Avatar, Stack } from '@mui/material';
 import gravatarUrl from 'gravatar-url';
 
 // hooks
@@ -83,34 +75,22 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
                 </Box>
 
                 <Box sx={{ mb: 5, mx: 2.5, mt: 5 }}>
-                    <Link
-                        underline="none"
-                        component={RouterLink}
-                        to={dataConfig.USER_PROFILE_URL}
-                    >
+                    <Link underline="none" component={RouterLink} to={dataConfig.USER_PROFILE_URL}>
                         <AccountStyle>
                             {user && (
                                 <Avatar
                                     src={gravatarUrl(user?.emailId, {
                                         size: 200,
-                                        default:
-                                            dataConfig.USER_DEFAULT_LOGO_URL,
+                                        default: dataConfig.USER_DEFAULT_LOGO_URL,
                                     })}
                                     alt="photoURL"
                                 />
                             )}
                             <Box sx={{ ml: 2 }}>
-                                <Typography
-                                    variant="subtitle2"
-                                    sx={{ color: 'text.primary' }}
-                                >
+                                <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
                                     {user?.firstName} {user?.lastName}
                                 </Typography>
-                                <Typography
-                                    variant="span"
-                                    fontSize={12}
-                                    sx={{ color: 'text.secondary' }}
-                                >
+                                <Typography variant="span" fontSize={12} sx={{ color: 'text.secondary' }}>
                                     {user?.emailId}
                                 </Typography>
                             </Box>

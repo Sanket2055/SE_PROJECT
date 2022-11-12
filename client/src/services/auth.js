@@ -73,13 +73,7 @@ export const deleteUser = async (data, setShowAlert, setAlertMessage) => {
     }
 };
 
-export const updatePassword = async (
-    formData,
-    setShowAlert,
-    setAlertMessage,
-    showHomeAlert,
-    homeAlertMessage
-) => {
+export const updatePassword = async (formData, setShowAlert, setAlertMessage, showHomeAlert, homeAlertMessage) => {
     try {
         //registering user to the DB
         const { data } = await api.updatePassword(formData);
@@ -95,13 +89,7 @@ export const updatePassword = async (
     }
 };
 
-export const editUser = async (
-    formData,
-    setShowAlert,
-    setAlertMessage,
-    showHomeAlert,
-    homeAlertMessage
-) => {
+export const editUser = async (formData, setShowAlert, setAlertMessage, showHomeAlert, homeAlertMessage) => {
     try {
         //registering user to the DB
         const { data } = await api.editUser(formData);

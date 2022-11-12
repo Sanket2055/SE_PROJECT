@@ -1,14 +1,7 @@
 import { useState } from 'react';
 // material
 import { styled, alpha } from '@mui/material/styles';
-import {
-    Input,
-    Slide,
-    Button,
-    IconButton,
-    InputAdornment,
-    ClickAwayListener,
-} from '@mui/material';
+import { Input, Slide, Button, IconButton, InputAdornment, ClickAwayListener } from '@mui/material';
 // component
 import Iconify from '../../components/Iconify';
 
@@ -55,11 +48,7 @@ export default function Searchbar() {
             <div>
                 {!isOpen && (
                     <IconButton onClick={handleOpen}>
-                        <Iconify
-                            icon="eva:search-fill"
-                            width={20}
-                            height={20}
-                        />
+                        <Iconify icon="eva:search-fill" width={20} height={20} />
                     </IconButton>
                 )}
 

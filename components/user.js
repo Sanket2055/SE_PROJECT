@@ -144,3 +144,127 @@ exports.emailList = async (req, res) => {
         });
     }
 };
+// delete user
+exports.deleteUser = async (req, res) => {
+    try {
+        apiAuth.validateUser(req.user, req.body.emailId);
+        const userCheck = await validator.userValidation(req.body.emailId);
+        if (!userCheck) {
+            var err = new Error('User does not exist!');
+            err.status = 400;
+            throw err;
+        }
+        const delete_response = await model.User.deleteOne({
+            emailId: req.body.emailId,
+        });
+        res.status(200).json({
+            status: 'Success',
+            message: 'User Account deleted!',
+            response: delete_response,
+        });
+    } catch (err) {
+        logger.error(
+            `URL : ${req.originalUrl} | staus : ${err.status} | message: ${err.message}`
+        );
+        res.status(err.status || 500).json({
+            message: err.message,
+        });
+    }
+};
+
+// edit user detail
+exports.editUser = async (req, res) => {
+    try {
+        apiAuth.validateUser(req.user, req.body.emailId);
+        const userCheck = await validator.userValidation(req.body.emailId);
+        if (!userCheck) {
+            var err = new Error('User does not exist!');
+            err.status = 400;
+            throw err;
+        }
+
+        var editUser = req.body;
+
+        if (
+            validator.notNull(editUser.firstName) &&
+            validator.notNull(editUser.lastName)
+        ) {
+            var update_response = await model.User.updateOne(
+                {
+                    emailId: editUser.emailId,
+                },
+                {
+                    $set: {
+                        firstName: editUser.firstName,
+                        lastName: editUser.lastName,
+                    },
+                }
+            );
+            res.status(200).json({
+                status: 'Success',
+                message: 'User update Success',
+                userId: update_response,
+            });
+        }
+    } catch (err) {
+        logger.error(
+            `URL : ${req.originalUrl} | staus : ${err.status} | message: ${err.message}`
+        );
+        res.status(err.status || 500).json({
+            message: err.message,
+        });
+    }
+};
+
+// update password
+exports.updatePassword = async (req, res) => {
+    try {
+        apiAuth.validateUser(req.user, req.body.emailId);
+        const user = await model.User.findOne({
+            emailId: req.body.emailId,
+        });
+        if (!user) {
+            var err = new Error('User does not exist!');
+            err.status = 400;
+            throw err;
+        }
+
+        validator.notNull(req.body.oldPassword);
+        validator.passwordValidation(req.body.newPassword);
+
+        const validCred = await bcrypt.compare(
+            req.body.oldPassword,
+            user.password
+        );
+        if (!validCred) {
+            var err = new Error('Old Password does not match');
+            err.status = 400;
+            throw err;
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        var hash_password = await bcrypt.hash(req.body.newPassword, salt);
+        var update_response = await model.User.updateOne(
+            {
+                emailId: req.body.emailId,
+            },
+            {
+                $set: {
+                    password: hash_password,
+                },
+            }
+        );
+        res.status(200).json({
+            status: 'Success',
+            message: 'Password update Success',
+            userId: update_response,
+        });
+    } catch (err) {
+        logger.error(
+            `URL : ${req.originalUrl} | staus : ${err.status} | message: ${err.message} ${err.stack}`
+        );
+        res.status(err.status || 500).json({
+            message: err.message,
+        });
+    }
+};

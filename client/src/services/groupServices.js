@@ -13,7 +13,6 @@ export const getUserGroupsService = async (data) => {
 export const createGroupService = async (data, setAlert, setAlertMessage) => {
     try {
         const create_response = await api.createGroup(data);
-        console.log(create_response.data)
         return create_response;
     } catch (err) {
         setAlert(true);
@@ -27,7 +26,6 @@ export const createGroupService = async (data, setAlert, setAlertMessage) => {
 export const editGroupService = async (data, setAlert, setAlertMessage) => {
     try {
         const edit_response = await api.editGroup(data);
-        console.log(edit_response.data)
         return edit_response;
     } catch (err) {
         setAlert(true);
@@ -41,7 +39,6 @@ export const editGroupService = async (data, setAlert, setAlertMessage) => {
 export const getGroupDetailsService = async (data, setAlert, setAlertMessage) => {
     try {
         const group_details = await api.getGroupDetails(data);
-        console.log(group_details.data)
         return group_details;
     } catch (err) {
         setAlert(true);
@@ -79,6 +76,14 @@ export const getGroupSettleService = async (data, setAlert, setAlertMessage) => 
 };
 
 export const settlementService = async (data, setAlert, setAlertMessage) => {
-    const settle_details = await api.makeSettle(data);
-    return settle_details;
+    try {
+        const settle_details = await api.makeSettle(data);
+        return settle_details;
+    } catch (err) {
+        setAlert(true);
+        err.response.status === 400 || err.response.status === 401
+            ? setAlertMessage(err.response.data.message)
+            : setAlertMessage('Oops! Something went worng');
+        return false;
+    }
 };

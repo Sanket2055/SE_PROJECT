@@ -52,7 +52,8 @@ Worked on the frontend, using ReactJS and Material UI
 
 
 
-Users can create their account, book tickets, and access their booking history
+Users can create their account with email name and password , can create groups for payment, and access their booking/payment history and can also settle their dues with their friends.
+ 
 
 ### Built With
 
@@ -60,13 +61,11 @@ Users can create their account, book tickets, and access their booking history
 [![Express][express.js]][express-url]
 [![React][react.js]][react-url]
 
-##Tech Stack
-####ReactJS
-####NodeJS
-####ExpressJS
-####MongoDB
-####Material UI
-####
+<h3>Tech Stack<h3>
+<h4>ReactJS<h4>
+<h4>Nodejs<h4>
+<h4>MongoDb<h4>
+<h4>Material UI<h4>
 
 ## Getting Started
 
@@ -113,6 +112,7 @@ Follow the steps below to get run the app in the local environment.
 ## Features
 
 ### Register and Login
+<!-- added images from design -->
 <div align='center'>
   <img src="https://i.ibb.co/WpTXCRt/register.png" width=95% alt="">
 </div>
@@ -171,7 +171,3 @@ Follow the steps below to get run the app in the local environment.
 [express-url]: https://expressjs.com/
 [mongo.db]: https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white
 [mongo-url]: https://www.mongodb.com/
-[redux]: https://img.shields.io/badge/Redux-593D88?style=for-the-badge&logo=redux&logoColor=white
-[redux-url]: https://redux-toolkit.js.org/
-[firebase]: https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase
-[firebase-url]: https://firebase.google.com/

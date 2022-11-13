@@ -18,7 +18,7 @@ Link: [Deployed Here](https://seproject2912.herokuapp.com/)
 ```
 worked on backend and some part of frontend
 1) all expense routes and controllers
-2)middlewares for authentication , and helpers
+2)middlewares for authentication , and helpers , error handling
 3)about component , alert banner , loading component etc in frontend
 ```
 
@@ -26,7 +26,7 @@ worked on backend and some part of frontend
 
 ```
 worked on backend and created expense components of frontend
-1) all user routes and controllers
+1) all user routes and controllers , designed mongoDB schema
 2) all group routes and controllers 
 3) utlis for sending emails ,  Api features and all expense related components in frontend
 ```
@@ -35,7 +35,7 @@ worked on backend and created expense components of frontend
 
 ```
 worked on frontend and created login and signup components
-1)Profile component
+1)Profile component and Api integration
 2)Dashboard section and created api service for dashboard
 3)Register component and settlement api
 ```
@@ -45,15 +45,15 @@ worked on frontend and created login and signup components
 
 ```
 Worked on the frontend, using ReactJS and Material UI
-1)Created Group components
+1)designed and Created Group components
 2)Created Theme's , Nav dom
-3)created layout and auth service 
+3)created layout and auth service , and api service for group 
 ```
 
 
 
 Users can create their account with email name and password , can create groups for payment, and access their booking/payment history and can also settle their dues with their friends.
- 
+
 
 ### Built With
 
@@ -136,11 +136,6 @@ Follow the steps below to get run the app in the local environment.
   <img src="https://i.ibb.co/mqMvg5C/9ec0b389-faab-4f87-a468-a8b9910d5628.png" width=95% alt="">
 </div>
 
-### Payment gateway
-
-<div align='center'>
-  <img src="https://user-images.githubusercontent.com/80644262/201144046-643c4f7a-cd6d-482b-aa51-b10c8fc07da7.png" width=95% alt="">
-</div>
 
 ### Charts and graphs
 
